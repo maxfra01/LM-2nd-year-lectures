@@ -69,6 +69,6 @@ Limitations of this task:
 We need a new architecture: Encoder-decoder.
 The encoder analyze the entire input sequence and produces a **state** (summarizing the entire input), then the decoder actually performs predictions.
 
-### Limitations of gated RRN
+### Limitations of gated RNN
 
 Gated RNN mitigates the problem of classic RNN, but they are still present. Unfortunately Gated RNN still can't be parallelized.

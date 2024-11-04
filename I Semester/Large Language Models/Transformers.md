@@ -165,7 +165,57 @@ GPT is an example of **decoder only** architecture: in this type of transformer,
 
 In GPT families, the model is **fine-tuned** on a specific supervised task (next word prediction): to generate next token, we use **greedy sampling**, so at every step we choose the token with the highest probability.
 
-### Sampling approaches
+# Sampling approaches
 
-1. Greedy
-2. Beam search: the idea is to expand $k$ most-probable sentences
+The goal of a transformer is **next token prediction**: if the output is a probability distribution across all known tokens, then we need some **policy** to choose the actual predicted token.
+
+### Greedy
+
+At each step we select the token with the **highest** probability. That is a **deterministic** approach and could lead to repetitive or predictable text.
+
+![[Pasted image 20241104152935.png]]
+
+### Beam search
+
+Start with the top k sequences (**beam width**), we expand each sequence by one token
+at a time.We keep only the **k most probable** sequences after each step
+- Repeat until stopping criterion
+- Explores some options before “committing” to a sequence
+Still a **deterministic approach**
+
+![[Pasted image 20241104153218.png]]
+
+### Random sampling
+
+At each step we choose a random token, could lead to non sense sentences.
+
+### Top K
+
+We sample from the **top-k most probable words**. This avoids having low-probability
+words showing up from time to time.
+
+![[Pasted image 20241104153443.png]]
+
+### Top P
+
+Similar to top-k, we sample from a subset of tokens: the subset is defined to cover a
+fraction p of the probability mass.
+This provides an adaptive pool of candidate tokens:
+- For high entropy distributions, there are more tokens to choose from
+- For low entropy distributions, there are fewer tokens to choose from
+
+![[Pasted image 20241104153608.png]]
+
+### Temperature sampling
+
+Like random sampling, but we use a version of softmax with a temperature $T$
+Currently, we always assumed $T=1$.
+- High temperature ($T>1$) flattens the probability distribution (**high** **entropy**)
+- Low temperature (𝑇 < 1)  sharpens the probability distribution (**low** **entropy**)
+General formula:
+$$
+y_{i} = \frac{\exp\left( \frac{z_{i}}{T} \right)}{\sum_{j}\exp\left( \frac{z_{j}}{T} \right)}
+$$
+Note that with $T \to 0$ then we are dealing with deterministic greedy sampling.
+
+![[Pasted image 20241104153931.png]]
