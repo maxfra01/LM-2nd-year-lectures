@@ -126,7 +126,7 @@ Consider the two last block of our data: in particular the last one $P_{n}$ is s
 ### CTR (Counter mode)
 
 This mode allows to encrypt $N$ bits at a time (called a "group").
-There is no need to apply padding, it only requires a nonce and a counter, composed by a suitable function. Note that a transmission error causes errors only in one group.
+There is **no need to apply padding**, it only requires a nonce (one-time number) and a counter, composed by a suitable function. Note that a transmission error causes errors only in one group.
 
 ![[Pasted image 20241002105830.png]]
 
@@ -278,11 +278,13 @@ only who knows the key can compare the transmitted digest with the digest calcul
 
 ### HMAC
 
-HMAC is a keyed-digest algorithm. It uses an hash function, so the correct name for HMAC algorithm is something like HMAC-SHA256
+HMAC is a keyed-digest algorithm. It uses an hash function, so the correct name for HMAC algorithm is something like HMAC-SHA256.
+It exploits symmetric cryptography, it guarantees data authentication and integrity.
 
 ### CBC-MAC
 
 Imagine that we are unable to use hash function, but we need to create a keyed digest. We can use CBC-MAC, that uses symmetric algorithm to calculate a keyed digest.
+It uses symmetric encryption; it guarantees data authentication and integrity.
 [[#CBC (Cipher block chaining)]]
 Starting from an empty initialization vector, we apply the encryption on the data:
 $$
@@ -293,13 +295,14 @@ This algorithm is secure only for fixed-length messages.
 # Combining secrecy and integrity
 
 In general, with symmetric encryption we guarantee secrecy. With a keyed digest we guarantee integrity, but how can we combine them?
-1. **A&E Authenticate and Encrypt**
+1. **A&E Authenticate and Encrypt** (parallel)
 2. **AtE Authenticate then Encrypt**
 3. **EtA Encrypt than authenticate**
 Notice that incorrect concatenation of secure algorithms can lead to an insecure result!.
 
-### Authenticated Encryption with Associated Data (AEAD
+### Authenticated Encryption with Associated Data (AEAD)
 
+With a single key we provide both Authentication and confidentiality.
 ![[Pasted image 20241013205956.png]]
 
 # Digital signature
@@ -315,3 +318,29 @@ This certificate has a limited lifetime and can be revoked at any moment from th
 The **receiver of a message needs to check if a certificate is valid!**
 
 Techniques to revoke certificates: **CRL** (Certificate revoked list) and **OCSP** (On-line certificate status protocol).
+
+# X.509 Certificates
+
+A **Public key certificate** typically binds a key ton an identity.
+There are **digitally signed** by a **CA (Certificate Authority)**, and they can be revoked on request by the user and the issuer.
+A X.509 Certificate contains:
+- The version of the certificate, typically 2 or 3
+- The serial number
+- The signature algorithm
+- The issuer
+- The validity (expiration date)
+- Other info
+- The **CA digital signature**.
+
+A **PKI**, Public key Infrastructure put in place for the creation, distribution and revocation of public key certificates.
+Any certificate can be revoked before the expiration date on request from the owner or autonomously by the issuer.
+
+When working with certificates, it is **receiver responsibility** to check the validity of a certificate at a signature time.
+
+![[Pasted image 20241122210217.png]]Who ensure the identity of CA?
+CAs are organized in a **hierarchical** model. When we need to verify a certificate we need to go up the hierarchy until we find a **Trusted root CA** which is secure and trusted.
+
+### Certificate revocation
+
+- **CRL (Certificate revocation list)** is a list of revoked certificates, signed by the CA. The location of the CRL is indicated by the CRL distribution point
+- **OCSP (Online certificate status protocol)**: is a protocol that tells validity ad the current time.
