@@ -14,7 +14,7 @@ To generate the next token we feed the decoder with BOS and tok1: it will output
 This process stops when the decoder produces a **EOS token**.
 Note that this architecture is **stateless**: if we need to generate a $i$-th token we need to feed the decoder every time with $t_{i-1}, t{i-2}, \dots, \text{BOS}$
 
-### Tokenization
+# Tokenization
 
 Transformers need to process natural language, so we need a way to **split sentences into pieces**: this process is called **tokenization**.
 Different strategies: split sentences in chars (see "case correction problem"), split sentences in words (see word2vec) or split sentences in **sub-words** (see fastText)
@@ -33,7 +33,7 @@ Common words should be associated to a unique token.
 
 The algorithm is the following:
 1. At the beginning, the corpus is initially encoded with 1 character (1 byte)
-2. We count the frequency of each pair of subsequent tokens in the corpus
+2. We count the frequency of each **pair** of subsequent tokens in the corpus
 3. The most frequent pair of tokens are combined into a new token
 4. We replace all pairs with the new "combined" token
 5. Repeat point 2-4 until a certain number of token is reached
@@ -76,7 +76,7 @@ Some models do not use sinusoidal PE: instead they learn positional embeddings d
 
 In the GPT-2 cosine similarity we can notice that, for vector 200, there is a weird behavior of the similarity.
 
-### Attention mechanism
+# Attention mechanism
 
 In Transformers, **attention** mechanism are widely used.
 In short, it takes **independent** input vectors, mixes them up and returns a **contextualized** version of those inputs.

@@ -28,6 +28,3 @@ Solving this problem with:
 - Random mutation hill climber: with a simple tweak (either we take or don't take an object) it leads to a **steady state**.
 - RMHC with a more powerful tweak: there is a small probability of making multiple small changes in the solution
 
-# Set Cover
-
-Given a family of sets, find the subfamily of minimum 
